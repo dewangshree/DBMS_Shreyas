@@ -1,45 +1,48 @@
- 
-create table employee
-(
-ssn varchar(6), 
-name varchar(10),
-deptno int, 
-primary key(ssn)
+-- Create employee table
+CREATE TABLE employee (
+    ssn VARCHAR(6), 
+    name VARCHAR(10),
+    deptno INT, 
+    PRIMARY KEY (ssn)
 );
- 
-create table project
-(
-projectno varchar(10), 
-projectarea varchar(20), 
-primary key(projectno)
-);
- 
-create table app
-(
-usn varchar(6), 
-projectno varchar(10), 
-foreign key(usn)references e(ssn),
-foreign key(projectno)references p(projectno)
-);
- 
-insert into employee values('01','abc',10);
-insert into employee values('02','xyz',20);
-insert into employee values('03','pqr',30);
-insert into employee values('04','lmn',40);
- 
-insert into project values('100','database');​
-insert into project values('200','network');
-insert into project values('300','android');
- 
-insert into app values('01','100');
-insert into app values('02','200');
-insert into app values('03','300');
-insert into app values('01','200');
- 
-select * from employee;
- 
-select *  from project;
- 
-select *  from app;
 
- 
+-- Create project table
+CREATE TABLE project (
+    projectno VARCHAR(10), 
+    projectarea VARCHAR(20), 
+    PRIMARY KEY (projectno)
+);
+
+-- Create app table
+CREATE TABLE app (
+    usn VARCHAR(6), 
+    projectno VARCHAR(10), 
+    FOREIGN KEY (usn) REFERENCES employee(ssn),
+    FOREIGN KEY (projectno) REFERENCES project(projectno)
+);
+
+-- Insert data into employee table
+INSERT INTO employee VALUES ('01', 'abc', 10);
+INSERT INTO employee VALUES ('02', 'xyz', 20);
+INSERT INTO employee VALUES ('03', 'pqr', 30);
+INSERT INTO employee VALUES ('04', 'lmn', 40);
+
+-- Insert data into project table
+INSERT INTO project VALUES ('100', 'database');
+INSERT INTO project VALUES ('200', 'network');
+INSERT INTO project VALUES ('300', 'android');
+
+-- Insert data into app table
+INSERT INTO app VALUES ('01', '100');
+INSERT INTO app VALUES ('02', '200');
+INSERT INTO app VALUES ('03', '300');
+INSERT INTO app VALUES ('01', '200');
+
+-- Select data from employee table
+SELECT * FROM employee;
+
+-- Select data from project table
+SELECT * FROM project;
+
+-- Select data from app table
+SELECT * FROM app;
