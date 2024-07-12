@@ -1,66 +1,62 @@
-create table books
-(
-ISBN varchar(10),
-Title varchar(10),
-Author varchar(10),
-Publisher varchar(10),
-primary key(ISBN)
+-- Create books table
+CREATE TABLE books (
+    ISBN VARCHAR(10),
+    Title VARCHAR(10),
+    Author VARCHAR(10),
+    Publisher VARCHAR(10),
+    PRIMARY KEY(ISBN)
 );
- 
-Insert into books values(
-ISBN TITLE AUTHOR PUBLISHER
-123​ T1 ​A1 ​P1
-002 ​DB ​A2 ​P2
-003 ​T3 ​A3 ​P3
-004 ​T4 ​A4 ​P4
-005 ​T5 ​A5​P5
- 
-create table student1
-(
-usn varchar(10), 
-name varchar(10),
-sem int, 
-dept varchar(3),
-primary key(usn)
+
+-- Insert data into books table
+INSERT INTO books VALUES ('123', 'T1', 'A1', 'P1');
+INSERT INTO books VALUES ('002', 'DB', 'A2', 'P2');
+INSERT INTO books VALUES ('003', 'T3', 'A3', 'P3');
+INSERT INTO books VALUES ('004', 'T4', 'A4', 'P4');
+INSERT INTO books VALUES ('005', 'T5', 'A5', 'P5');
+
+-- Create student1 table
+CREATE TABLE student1 (
+    usn VARCHAR(10), 
+    name VARCHAR(10),
+    sem INT, 
+    dept VARCHAR(3),
+    PRIMARY KEY(usn)
 );
- 
-Insert into student1 values(
- 
-SN ​NAME  ​SEM ​DEPT
-111 ​aaa ​​3  ​ISE
-222 ​bbb ​​4 ​CSE
-333 ​ccc ​​3  ​CSE
-444 ​ddd       ​4 ​ISE
-555 ​eee ​​4  ​ISE
- 
- 
-create table borrow
-(
-ISBN varchar(10),
-usn varchar(10), 
-dates varchar(10),
-foreign key(ISBN) references books(ISBN),
-foreign key(usn) references student1(usn)
+
+-- Insert data into student1 table
+INSERT INTO student1 VALUES ('111', 'aaa', 3, 'ISE');
+INSERT INTO student1 VALUES ('222', 'bbb', 4, 'CSE');
+INSERT INTO student1 VALUES ('333', 'ccc', 3, 'CSE');
+INSERT INTO student1 VALUES ('444', 'ddd', 4, 'ISE');
+INSERT INTO student1 VALUES ('555', 'eee', 4, 'ISE');
+
+-- Create borrow table
+CREATE TABLE borrow (
+    ISBN VARCHAR(10),
+    usn VARCHAR(10), 
+    dates VARCHAR(10),
+    FOREIGN KEY(ISBN) REFERENCES books(ISBN),
+    FOREIGN KEY(usn) REFERENCES student1(usn)
 );
- 
-insert into borrow values(
-ISBN  ​USN ​DATES
-123 ​222 ​1/2/13
-002 ​333 ​2/2/13
-003 ​111 ​3/2/13
-005 ​444 ​4/2/13
-003 ​555   ​5/2/13
-  
 
-select NAME from student1
-where USN=(select USN from borrow where ISBN='123');
+-- Insert data into borrow table
+INSERT INTO borrow VALUES ('123', '222', '1/2/13');
+INSERT INTO borrow VALUES ('002', '333', '2/2/13');
+INSERT INTO borrow VALUES ('003', '111', '3/2/13');
+INSERT INTO borrow VALUES ('005', '444', '4/2/13');
+INSERT INTO borrow VALUES ('003', '555', '5/2/13');
 
- 
+-- Query 1: Get student name who borrowed a book with ISBN '123'
+SELECT name
+FROM student1
+WHERE usn = (SELECT usn FROM borrow WHERE ISBN = '123');
 
-select NAME from student1
-where USN=(select USN from borrow where ISBN=(select ISBN from books where TITLE='DB'));
+-- Query 2: Get student name who borrowed a book with title 'DB'
+SELECT name
+FROM student1
+WHERE usn = (SELECT usn FROM borrow WHERE ISBN = (SELECT ISBN FROM books WHERE Title = 'DB'));
 
-
- 
-select count(ISBN) from borrow
-group by USN;
+-- Query 3: Count of books borrowed by each student
+SELECT usn, COUNT(ISBN) AS num_books_borrowed
+FROM borrow
+GROUP BY usn;
