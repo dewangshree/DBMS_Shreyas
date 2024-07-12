@@ -1,110 +1,113 @@
-Create Table Customer
-(
-Cid VARCHAR(3),
-fname varchar(15),
-lname varchar(15),
-color varchar(15),
-City varchar(10),
-Phone varchar(10),
-PRIMARY KEY(CID)
+-- Create Customer table
+CREATE TABLE Customer (
+    Cid VARCHAR(3),
+    fname VARCHAR(15),
+    lname VARCHAR(15),
+    City VARCHAR(10),
+    Phone VARCHAR(10),
+    PRIMARY KEY(Cid)
 );
- 
-CREATE TABLE BRANCH
-(
-BID VARCHAR(3),
-BNAME VARCHAR(10),
-CITY VARCHAR(10),
-PRIMARY KEY(BID)
+
+-- Create BRANCH table
+CREATE TABLE BRANCH (
+    BID VARCHAR(3),
+    BNAME VARCHAR(10),
+    CITY VARCHAR(10),
+    PRIMARY KEY(BID)
 );
- 
-CREATE TABLE ACCOUNT
-(
-ACC_ID VARCHAR(6),
-CID VARCHAR(6),
-BID VARCHAR (3),
-BALANCE NUMBER(10),
-ATYPE VARCHAR(2),
-PRIMARY KEY(ACC_ID),
-FOREIGN KEY(CID) REFERENCES CUSTOMER(CID),
-FOREIGN KEY(BID) REFERENCES BRANCH(BID)
+
+-- Create ACCOUNT table
+CREATE TABLE ACCOUNT (
+    ACC_ID VARCHAR(6),
+    CID VARCHAR(3),
+    BID VARCHAR(3),
+    BALANCE NUMBER(10),
+    ATYPE VARCHAR(2),
+    PRIMARY KEY(ACC_ID),
+    FOREIGN KEY(CID) REFERENCES Customer(Cid),
+    FOREIGN KEY(BID) REFERENCES BRANCH(BID)
 );
- 
-CREATE TABLE TRANSACTION
-(
-TID VARCHAR(6),
-ACCID VARCHAR(6),
-TTypeVARCHAR (3),
-Amount NUMBER(10),
-ATYPE VARCHAR(2),
-PRIMARY KEY(TID),
-FOREIGN KEY(ACCID) REFERENCES ACCOUNT(ACC_ID),
+
+-- Create TRANSACTION1 table
+CREATE TABLE TRANSACTION1 (
+    TID VARCHAR(6),
+    ACCID VARCHAR(6),
+    TType VARCHAR(6),
+    Amount NUMBER(10),
+    ATYPE VARCHAR(2),
+    PRIMARY KEY(TID),
+    FOREIGN KEY(ACCID) REFERENCES ACCOUNT(ACC_ID)
 );
- 
-INSERT INTO Customer VALUES('C01','AAA','YYY', ‘DELHI’, 9886066466);
-INSERT INTO Customer VALUES('C02','BBB','XXX’, ‘DELHI’, 9886166466);
-INSERT INTO Customer VALUES('C03','CCC','ZZZ', ‘DELHI’, 9886466466);
-INSERT INTO Customer VALUES('C04','DDD','PPP', ‘DELHI’, 9886366466);
-INSERT INTO Customer VALUES('C05',EEE','SSS', ‘DELHI’, 9886266466);
- 
-INSERT INTO BRANCH VALUES('B01',’MSR Nagar’, Bangalore);
-INSERT INTO BRANCH VALUES('B02',’NSR Nagar’, Bangalore);
-INSERT INTO BRANCH VALUES('B03',’OSR Nagar’, Bangalore);
-INSERT INTO BRANCH VALUES('B04',’PSR Nagar’, Bangalore);
-INSERT INTO BRANCH VALUES('B05',’QSR Nagar’, Bangalore);
- 
-INSERT INTO ACCOUNT VALUES('A01','C01','B01', 3000,S);
-INSERT INTO ACCOUNT VALUES('A02','C01','B01', 3000,S);
-INSERT INTO ACCOUNT VALUES('A03','C02','B02', 3000,C);
-INSERT INTO ACCOUNT VALUES('A04','C01','B01', 3000,S);
-INSERT INTO ACCOUNT VALUES('A05','C04','B03', 3000,C);
- 
-INSERT INTO TRANSACTION VALUES('T01','A01,'Credit’, 3000);
-INSERT INTO TRANSACTION VALUES('T02','A01,'Credit’, 2000);
-INSERT INTO TRANSACTION VALUES('T03','A02,'Debit’, 7000);
-INSERT INTO TRANSACTION VALUES('T04','A01,'Credit’, 6000);
-INSERT INTO TRANSACTION VALUES('T05','A03,'Debit’, 4000);
- 
- 
 
+-- Insert data into Customer table
+INSERT INTO Customer VALUES('C01', 'AAA', 'YYY', 'DELHI', '9886066466');
+INSERT INTO Customer VALUES('C02', 'BBB', 'XXX', 'DELHI', '9886166466');
+INSERT INTO Customer VALUES('C03', 'CCC', 'ZZZ', 'DELHI', '9886466466');
+INSERT INTO Customer VALUES('C04', 'DDD', 'PPP', 'DELHI', '9886366466');
+INSERT INTO Customer VALUES('C05', 'EEE', 'SSS', 'DELHI', '9886266466');
 
-Select * from Customer
-where CID IN (
-​​Select CID
-​​From ACCOUNT
-​​Where ATYPE = ‘C’
-​​​INTERSECT
-​​Select CID
-​​From ACCOUNT
-​​Where ATYPE = ‘S’) ;
- 
+-- Insert data into BRANCH table
+INSERT INTO BRANCH VALUES('B01', 'MSR Nagar', 'Bangalore');
+INSERT INTO BRANCH VALUES('B02', 'NSR Nagar', 'Bangalore');
+INSERT INTO BRANCH VALUES('B03', 'OSR Nagar', 'Bangalore');
+INSERT INTO BRANCH VALUES('B04', 'PSR Nagar', 'Bangalore');
+INSERT INTO BRANCH VALUES('B05', 'QSR Nagar', 'Bangalore');
 
+-- Insert data into ACCOUNT table
+INSERT INTO ACCOUNT VALUES('A01', 'C01', 'B01', 3000, 'S');
+INSERT INTO ACCOUNT VALUES('A02', 'C01', 'B01', 3000, 'S');
+INSERT INTO ACCOUNT VALUES('A03', 'C02', 'B02', 3000, 'C');
+INSERT INTO ACCOUNT VALUES('A04', 'C01', 'B01', 3000, 'S');
+INSERT INTO ACCOUNT VALUES('A05', 'C04', 'B03', 3000, 'C');
 
+-- Insert data into TRANSACTION1 table
+INSERT INTO TRANSACTION1 VALUES('T01', 'A01', 'Credit', 3000, 'S');
+INSERT INTO TRANSACTION1 VALUES('T02', 'A01', 'Credit', 2000, 'S');
+INSERT INTO TRANSACTION1 VALUES('T03', 'A02', 'Debit', 7000, 'S');
+INSERT INTO TRANSACTION1 VALUES('T04', 'A01', 'Credit', 6000, 'S');
+INSERT INTO TRANSACTION1 VALUES('T05', 'A03', 'Debit', 4000, 'S');
 
-select BID, BNAME, Count(BID)
-from BRANCH
-group by BID, BNAME.
- 
+-- Query 1: Customers who have both 'C' and 'S' account types
+SELECT * 
+FROM Customer
+WHERE Cid IN (
+    SELECT CID
+    FROM ACCOUNT
+    WHERE ATYPE = 'C'
+    INTERSECT
+    SELECT CID
+    FROM ACCOUNT
+    WHERE ATYPE = 'S'
+);
 
+-- Query 2: Count of branches
+SELECT BID, COUNT(BID)
+FROM BRANCH
+GROUP BY BID;
 
-  
-​​Select * from Customers
-​​where CID IN ( select CID from ACCOUNT
-​​where ACC_ID IN ( select ACC_ID
-​​​​​from TRANSACTION
-​​​​​group by ACC_ID
-​​​​​having count( TID) >=3) );
- 
+-- Query 3: Customers who have accounts with at least 3 transactions
+SELECT *
+FROM Customer
+WHERE Cid IN (
+    SELECT CID
+    FROM ACCOUNT
+    WHERE ACC_ID IN (
+        SELECT ACCID
+        FROM TRANSACTION1
+        GROUP BY ACCID
+        HAVING COUNT(TID) >= 3
+    )
+);
 
-
-
- 
-​​​select BNAME, sum(BALANCE)
-​​​from ACCOUNT
-​​​group by BNAME having sum(BALANCE)
-​​​(select avg(totbalance)
-​​​from (select BNAME, sum(BALANCE)
-​​​from ACCOUNT
-​​​group by BNAME ) as BRANCHTOTAL (BNAME, BALANCE))
- 
- 
- 
+-- Query 4: Branches and their total balance, compared to average branch balance
+SELECT BID, SUM(BALANCE)
+FROM ACCOUNT
+GROUP BY BID
+HAVING SUM(BALANCE) > (
+    SELECT AVG(totbalance)
+    FROM (
+        SELECT BID, SUM(BALANCE) AS totbalance
+        FROM ACCOUNT
+        GROUP BY BID
+    ) AS BRANCHTOTAL
+);
